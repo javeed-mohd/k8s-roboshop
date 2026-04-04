@@ -1,3 +1,17 @@
+# A ConfigMap is an object used to store Environment variables, Configuration files, Command-line arguments as key–value pairs.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalogue
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+data:
+  MONGO: "true"
+  MONGO_URL: "mongodb://mongodb:27017/catalogue"
+---
 # Create multiple replicas of your pod. Always runs desired number of pods. 
 apiVersion: apps/v1
 kind: Deployment
@@ -28,6 +42,9 @@ spec:
       containers:
       - name: catalogue
         image: javeedmohd214/catalogue:1.0.0
+        envFrom:
+        - configMapRef:
+            name: catalogue
 ---
 # By default, it will be cluster ip.
 apiVersion: v1
