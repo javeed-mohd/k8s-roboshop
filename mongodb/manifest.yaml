@@ -1,0 +1,53 @@
+# Create multiple replicas of your pod. Always runs desired number of pods. 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: roboshop
+  # These labels are replicset labels reference
+  labels:
+    project: roboshop
+    tier: database
+    component: mongodb
+  # annotations:
+  #   kubernetes.io/change-cause: "Moving to 1.29.7"
+spec:
+  replicas: 1
+  selector:
+  # Using these labels, replicaset selects the pod.
+    matchLabels:
+      project: roboshop
+      tier: database
+      component: mongodb
+  # This is Pod definition, Pod is subset of replicaset
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        tier: database
+        component: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: javeedmohd214/mongodb:1.0.0
+---
+# By default, it will be cluster ip.
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: database
+    component: mongodb
+spec:
+  selector:
+    # Labels are used as selectors.
+    project: roboshop
+    tier: database
+    component: mongodb
+  ports:
+  - protocol: TCP
+    port: 27017          # Host/Service Port
+    targetPort: 27017    # Container Port   

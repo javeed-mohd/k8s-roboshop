@@ -1,0 +1,9 @@
+# Creation of Namespace --> Namespace is a way to organize and isolate resources within a cluster
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: roboshop
+  labels:
+    project: roboshop
+    environment: dev
+    purpose: poc
