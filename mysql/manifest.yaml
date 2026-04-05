@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb
+  name: mysql
   namespace: roboshop
   # These labels are replicset labels reference
   labels:
     project: roboshop
     tier: database
-    component: mongodb
+    component: mysql
 spec:
   replicas: 1
   selector:
@@ -16,36 +16,36 @@ spec:
     matchLabels:
       project: roboshop
       tier: database
-      component: mongodb
+      component: mysql
   # This is Pod definition, Pod is subset of replicaset
   template:
     metadata:
       labels:
         project: roboshop
         tier: database
-        component: mongodb
+        component: mysql
     spec:
       containers:
-      - name: mongodb
-        image: javeedmohd214/mongodb:1.0.0
+      - name: mysql
+        image: javeedmohd214/mysql:1.0.0
 ---
 # By default, it will be cluster ip.
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb
+  name: mysql
   namespace: roboshop
   labels:
     project: roboshop
     tier: database
-    component: mongodb
+    component: mysql
 spec:
   selector:
     # Labels are used as selectors.
     project: roboshop
     tier: database
-    component: mongodb
+    component: mysql
   ports:
   - protocol: TCP
-    port: 27017          # Service Port
-    targetPort: 27017    # Container Port   
+    port: 3306          # Service Port
+    targetPort: 3306    # Container Port   

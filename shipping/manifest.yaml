@@ -1,0 +1,68 @@
+# A ConfigMap is an object used to store Environment variables, Configuration files, Command-line arguments as key–value pairs.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shipping
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: backend
+    component: shipping
+data:
+  CART_ENDPOINT: "cart:8080"
+  DB_HOST: "mysql"
+---
+# Create multiple replicas of your pod. Always runs desired number of pods. 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping
+  namespace: roboshop
+  # These labels are replicset labels reference
+  labels:
+    project: roboshop
+    tier: backend
+    component: shipping
+spec:
+  replicas: 1
+  selector:
+  # Using these labels, replicaset selects the pod.
+    matchLabels:
+      project: roboshop
+      tier: backend
+      component: shipping
+  # This is Pod definition, Pod is subset of replicaset
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        tier: backend
+        component: shipping
+    spec:
+      containers:
+      - name: shipping
+        image: javeedmohd214/shipping:1.0.0
+        envFrom:
+        - configMapRef:
+            name: shipping
+---
+# By default, it will be cluster ip.
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: backend
+    component: shipping
+spec:
+  selector:
+    # Labels are used as selectors.
+    project: roboshop
+    tier: backend
+    component: shipping
+  ports:
+  - protocol: TCP
+    port: 8080           # Service Port
+    targetPort: 8080     # Container Port   
