@@ -42,6 +42,33 @@ spec:
       containers:
       - name: catalogue
         image: javeedmohd214/catalogue:1.0.0
+        resources:
+          # Soft limit
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          # Hard limit
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        # A readiness probe checks whether a container is ready to accept traffic. If it fails, K8s stops sending requests to that container.
+        readinessProbe:
+          # httpGet:
+          #   path: /health
+          #   port: 8080
+          # To check whether the port is open/not
+          tcpSocket:
+            port: 8080
+          failureThreshold: 2
+          periodSeconds: 10
+          initialDelaySeconds: 
+        # A liveness probe checks whether a container is still running properly. If it fails, K8s restarts the container.
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          failureThreshold: 2
+          periodSeconds: 10
         envFrom:
         - configMapRef:
             name: catalogue
