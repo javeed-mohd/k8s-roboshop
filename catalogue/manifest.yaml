@@ -61,7 +61,7 @@ spec:
             port: 8080
           failureThreshold: 2
           periodSeconds: 10
-          initialDelaySeconds: 
+          initialDelaySeconds: 15
         # A liveness probe checks whether a container is still running properly. If it fails, K8s restarts the container.
         livenessProbe:
           httpGet:
@@ -73,7 +73,7 @@ spec:
         - configMapRef:
             name: catalogue
 ---
-# By default, it will be cluster ip.
+# By default, it will be Cluster IP.
 apiVersion: v1
 kind: Service
 metadata:
