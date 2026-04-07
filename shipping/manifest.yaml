@@ -41,7 +41,42 @@ spec:
     spec:
       containers:
       - name: shipping
-        image: javeedmohd214/shipping:1.0.0
+        image: javeedmohd214/shipping:1.4.0
+        imagePullPolicy: Always       # Safe to pull everytime, there may be same version rebuilt and pushed.
+        resources:
+          # Soft limit
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          # Hard limit
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        # A readiness probe checks whether a container is ready to accept traffic. If it fails, K8s stops sending requests to that container.
+        readinessProbe:
+          # httpGet:
+          #   path: /health
+          #   port: 8080
+          # To check whether the port is open/not
+          tcpSocket:
+            port: 8080
+          failureThreshold: 2
+          periodSeconds: 10
+          initialDelaySeconds: 15
+        # A startup probe checks whether a container has successfully started. It is used for slow-starting applications and prevents premature restarts during initialization.
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          failureThreshold: 20
+          periodSeconds: 10
+        # A liveness probe checks whether a container is still running properly. If it fails, K8s restarts the container.
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          failureThreshold: 2
+          periodSeconds: 10
         envFrom:
         - configMapRef:
             name: shipping
