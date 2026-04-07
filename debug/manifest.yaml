@@ -1,0 +1,11 @@
+# We use this only for checking purpose
+# Creation of pod --> pod is smallest deployable unit in kubernetes. A pod can have one or multiple containers in it. Containers inside pod share same network and storage
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+  namespace: roboshop
+spec:
+  containers:
+  - name: debug
+    image: javeedmohd214/debug:1.0.0
