@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: javeedmohd214/mysql:1.0.0
+        image: javeedmohd214/mysql:1.4.0
 ---
 # By default, it will be cluster ip.
 apiVersion: v1

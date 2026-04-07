@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
       - name: cart
-        image: javeedmohd214/cart:1.0.0
+        image: javeedmohd214/cart:1.4.0
         imagePullPolicy: Always       # Safe to pull everytime, there may be same version rebuilt and pushed.
         resources:
           # Soft limit
