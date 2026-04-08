@@ -100,13 +100,47 @@ spec:
         tier: frontend
         component: frontend
     spec:
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: frontend
       containers:
       - name: frontend
-        image: javeedmohd214/frontend:1.0.0
-        # envFrom is used in a Pod specifications to load all key–value pairs from a ConfigMap or Secret as environment variables into a container.
-        envFrom:
-        - configMapRef:
-            name: frontend
+        image: javeedmohd214/frontend:1.4.0
+        imagePullPolicy: Always       # Safe to pull everytime, there may be same version rebuilt and pushed.
+        resources:
+          # Soft limit
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          # Hard limit
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        # A readiness probe checks whether a container is ready to accept traffic. If it fails, K8s stops sending requests to that container.
+        readinessProbe:
+          # httpGet:
+          #   path: /
+          #   port: 80
+          # To check whether the port is open/not
+          tcpSocket:
+            port: 80
+          failureThreshold: 2
+          periodSeconds: 10
+          initialDelaySeconds: 15       # Container will become available in 35 seconds.
+        # A liveness probe checks whether a container is still running properly. If it fails, K8s restarts the container.
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          failureThreshold: 2
+          periodSeconds: 10
+        volumeMounts:
+        - name: nginx-config
+          # By default it mounts and thinks as directory
+          mountPath: "/etc/nginx/nginx.conf"
+          subPath: nginx.conf
+          readOnly: true
 ---
 # By default, it will be cluster ip.
 apiVersion: v1
@@ -119,8 +153,9 @@ metadata:
     tier: frontend
     component: frontend
 spec:
+  # We will be exposing the application externally to internet using LoadBalancer.
+  type: LoadBalancer
   selector:
-    type: LoadBalancer
     # Labels are used as selectors.
     project: roboshop
     tier: frontend
@@ -128,4 +163,4 @@ spec:
   ports:
   - protocol: TCP
     port: 80            # Service Port
-    targetPort: 8080     # Container Port   
+    targetPort: 80      # Container Port   
