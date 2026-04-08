@@ -42,6 +42,7 @@ spec:
       containers:
       - name: rabbitmq
         image: rabbitmq:3
+        # envFrom is used in a Pod specifications to load all key–value pairs from a ConfigMap or Secret as environment variables into a container.
         envFrom:
         - configMapRef:
             name: rabbitmq

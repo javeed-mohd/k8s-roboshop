@@ -47,6 +47,7 @@ spec:
       containers:
       - name: payment
         image: javeedmohd214/payment:1.0.0
+        # envFrom is used in a Pod specifications to load all key–value pairs from a ConfigMap or Secret as environment variables into a container.
         envFrom:
         - configMapRef:
             name: payment

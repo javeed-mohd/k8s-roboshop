@@ -71,6 +71,7 @@ spec:
             port: 8080
           failureThreshold: 2
           periodSeconds: 10
+        # envFrom is used in a Pod specifications to load all key–value pairs from a ConfigMap or Secret as environment variables into a container.
         envFrom:
         - configMapRef:
             name: cart
