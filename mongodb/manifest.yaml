@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: javeedmohd214/mongodb:1.4.0
+        image: javeedmohd214/mongodb:1.0.0
 ---
 # By default, it will be cluster ip.
 apiVersion: v1
