@@ -18,7 +18,7 @@ kind: Deployment
 metadata:
   name: shipping
   namespace: roboshop
-  # These labels are replicset labels reference
+  # These labels are replicaset labels reference
   labels:
     project: roboshop
     tier: backend
@@ -62,7 +62,7 @@ spec:
             port: 8080
           failureThreshold: 2
           periodSeconds: 10
-          initialDelaySeconds: 15
+          initialDelaySeconds: 15       # Container will become available in 35 seconds.
         # A startup probe checks whether a container has successfully started. It is used for slow-starting applications and prevents premature restarts during initialization.
         startupProbe:
           httpGet:

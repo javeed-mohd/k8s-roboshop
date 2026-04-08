@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: redis
   namespace: roboshop
-  # These labels are replicset labels reference
+  # These labels are replicaset labels reference
   labels:
     project: roboshop
     tier: database

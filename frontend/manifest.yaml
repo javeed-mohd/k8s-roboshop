@@ -79,7 +79,7 @@ kind: Deployment
 metadata:
   name: frontend
   namespace: roboshop
-  # These labels are replicset labels reference
+  # These labels are replicaset labels reference
   labels:
     project: roboshop
     tier: frontend
